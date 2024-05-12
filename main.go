@@ -18,19 +18,36 @@ func main() {
 
 	// export orgnName from config.json     "project_id": "zvdy-helm",
 
-	orgName := "organizations/@org"
+	orgName := "organizations/$org"
 
 	// Create a list request for the APIs in the organization
-	req := service.Organizations.Apis.List(orgName)
+	listapis := service.Organizations.Apis.List(orgName)
 
 	// Execute the request
-	resp, err := req.Do()
+	resp, err := listapis.Do()
 	if err != nil {
 		log.Fatalf("Failed to list APIs: %v", err)
 	}
 
 	// Print the names of the API proxies
+	println("API Proxies")
 	for _, api := range resp.Proxies {
 		log.Println(api.Name)
 	}
+
+	// Create a list request for the products in the organization
+	listproducts := service.Organizations.Apiproducts.List(orgName)
+
+	// Execute the request
+	resp2, err := listproducts.Do()
+	if err != nil {
+		log.Fatalf("Failed to list products: %v", err)
+	}
+
+	// Print the names of the API products
+	println("API Products")
+	for _, product := range resp2.ApiProduct {
+		log.Println(product.Name)
+	}
+
 }
